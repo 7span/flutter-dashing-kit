@@ -38,7 +38,7 @@ melos:
   scripts:
     analyze:
       description: Analyze all Dart & Flutter packages
-      run: melos exec -c 10 -- "flutter analyze ."
+      run: melos exec -c 1 --ignore="boilerplate_melos_project" -- "flutter analyze ."
 
     build-runner:
       description: Generate environment config, routes & code
@@ -99,6 +99,7 @@ melos:
 
     format:
       description: Format & fix Dart code
+      run: |
         dart format . --line-length 70 --output=none
         dart fix --apply --code=require_trailing_commas
       exec:

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:app_core/app/routes/app_router.dart';
 import 'package:app_core/core/domain/bloc/notification_cubit/notification_cubit.dart';
 import 'package:app_core/modules/home/repository/home_repository.dart';
@@ -19,9 +21,11 @@ class BottomNavigationBarScreen extends StatefulWidget
     return RepositoryProvider<HomeRepository>(
       create: (context) => HomeRepository(),
       child: BlocProvider(
-        create:
-            (context) =>
-        NotificationCubit(context.read<HomeRepository>())..checkNotificationPermissionStatus(),
+        create: (context) {
+          final cubit = NotificationCubit(context.read<HomeRepository>());
+          unawaited(cubit.checkNotificationPermissionStatus());
+          return cubit;
+        },
         child: this,
       ),
     );
@@ -37,7 +41,7 @@ class _BottomNavigationBarScreenState
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _checkNotificationPermissionStatus();
+    unawaited(_checkNotificationPermissionStatus());
   }
 
   Future<void> _checkNotificationPermissionStatus() async {

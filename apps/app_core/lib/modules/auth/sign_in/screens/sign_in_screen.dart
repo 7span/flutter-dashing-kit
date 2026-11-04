@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:app_core/app/routes/app_router.dart';
@@ -292,26 +293,28 @@ class _ContinueWithAppleButton extends StatelessWidget {
   }
 
   void _loginWithApple(BuildContext context) {
-    AppleAuthHelper.signIn(
-      context,
-      onSuccess: () {
-        if (context.mounted) {
-          showAppSnackbar(context, context.t.sign_in_successful);
-        }
-      },
-      onError: (error) {
-        if (context.mounted) {
-          if (error.code == AuthorizationErrorCode.canceled) {
-            showAppSnackbar(context, context.t.operation_cancelled, type: SnackbarType.failed);
-          } else {
-            showAppSnackbar(context, error.message, type: SnackbarType.failed);
+    unawaited(
+      AppleAuthHelper.signIn(
+        context,
+        onSuccess: () {
+          if (context.mounted) {
+            showAppSnackbar(context, context.t.sign_in_successful);
           }
+        },
+        onError: (error) {
+          if (context.mounted) {
+            if (error.code == AuthorizationErrorCode.canceled) {
+              showAppSnackbar(context, context.t.operation_cancelled, type: SnackbarType.failed);
+            } else {
+              showAppSnackbar(context, error.message, type: SnackbarType.failed);
+            }
+          }
+        },
+      ).then((requestModel) {
+        if (requestModel != null && context.mounted) {
+          context.read<SignInBloc>().add(SignInWithGoogleTaped(requestModel: requestModel));
         }
-      },
-    ).then((requestModel) {
-      if (requestModel != null && context.mounted) {
-        context.read<SignInBloc>().add(SignInWithGoogleTaped(requestModel: requestModel));
-      }
-    });
+      }),
+    );
   }
 }

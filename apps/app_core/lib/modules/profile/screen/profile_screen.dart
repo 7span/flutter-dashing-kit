@@ -68,8 +68,8 @@ class ProfileScreen extends StatelessWidget implements AutoRouteWrapper {
                 ),
                 ProfileListTile(
                   title: context.t.logout,
-                  onTap: () {
-                    showDialog<void>(
+                  onTap: () async {
+                    await showDialog<void>(
                       context: context,
                       useRootNavigator: false,
                       builder:
@@ -92,8 +92,8 @@ class ProfileScreen extends StatelessWidget implements AutoRouteWrapper {
                 ),
                 ProfileListTile(
                   title: context.t.delete_account,
-                  onTap: () {
-                    showDialog<void>(
+                  onTap: () async {
+                    await showDialog<void>(
                       context: context,
                       useRootNavigator: false,
                       builder:

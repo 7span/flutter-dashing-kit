@@ -1,4 +1,6 @@
 
+import 'dart:async';
+
 import 'package:app_core/app/config/app_config.dart';
 import 'package:app_core/app/helpers/injection.dart';
 import 'package:app_core/app/routes/app_router.dart';
@@ -38,7 +40,7 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   /// Here we're initializing the theme bloc so that we can change the theme anywhere from the App
   List<BlocProvider<dynamic>> get providers => <BlocProvider<dynamic>>[
-    BlocProvider<ThemeBloc>(create: (BuildContext context) => ThemeBloc()),
+    BlocProvider<ThemeBloc>(create: (context) => ThemeBloc()),
   ];
 
   final AppRouter _appRouter = AppRouter();
@@ -54,7 +56,7 @@ class _AppState extends State<App> {
       child: MultiBlocProvider(
         providers: providers,
         child: BlocBuilder<ThemeBloc, AppThemeColorMode>(
-          builder: (BuildContext context, AppThemeColorMode themeMode) {
+          builder: (context, themeMode) {
             return AppResponsiveTheme(
               colorMode: themeMode,
               child: MaterialApp.router(
@@ -63,7 +65,7 @@ class _AppState extends State<App> {
                 locale: TranslationProvider.of(context).flutterLocale,
                 supportedLocales: AppLocaleUtils.supportedLocales,
                 localizationsDelegates: GlobalMaterialLocalizations.delegates,
-                builder: (BuildContext context, Widget? widget) {
+                builder: (context, widget) {
                   ErrorWidget.builder = (details) {
                     return ErrorScreen(details: details);
                   };
@@ -123,9 +125,9 @@ class _AppState extends State<App> {
 
   @override
   void dispose() {
-    NetWorkInfoService.instance.dispose();
-    _connectivityService.dispose();
-    getIt<NotificationServiceInterface>().dispose();
+    unawaited(NetWorkInfoService.instance.dispose());
+    unawaited(_connectivityService.dispose());
+    unawaited(getIt<NotificationServiceInterface>().dispose());
     super.dispose();
   }
 

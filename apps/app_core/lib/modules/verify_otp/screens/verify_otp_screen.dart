@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:api_client/api_client.dart';
 import 'package:app_core/app/routes/app_router.dart';
 import 'package:app_core/core/presentation/widgets/app_snackbar.dart';
@@ -44,7 +46,7 @@ class _VerifyOTPScreenState extends State<VerifyOTPScreen> with TickerProviderSt
         listener: (context, state) {
           if (state.verifyOtpStatus == ApiStatus.loaded && state.otp.value == '222222') {
             showAppSnackbar(context, 'OTP verified successfully!');
-            context.replaceRoute(const ChangePasswordRoute());
+            unawaited(context.replaceRoute(const ChangePasswordRoute()));
           } else if (state.verifyOtpStatus == ApiStatus.error) {
             showAppSnackbar(context, 'Invalid OTP', type: SnackbarType.failed);
           }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:app_core/app/helpers/logger_helper.dart';
 import 'package:app_core/core/presentation/widgets/app_snackbar.dart';
 import 'package:app_core/modules/subscription/cubit/subscription_cubit.dart';
@@ -17,10 +19,14 @@ class SubscriptionScreen extends StatelessWidget implements AutoRouteWrapper {
     return RepositoryProvider(
       create: (context) => SubscriptionRepository(),
       child: BlocProvider(
-        create:
-            (context) =>
-                SubscriptionCubit(RepositoryProvider.of<SubscriptionRepository>(context), context)
-                  ..getPlans(context, SubscriptionUtils.subscriptionProductId),
+        create: (context) {
+          final cubit = SubscriptionCubit(
+            RepositoryProvider.of<SubscriptionRepository>(context),
+            context,
+          );
+          unawaited(cubit.getPlans(context, SubscriptionUtils.subscriptionProductId));
+          return cubit;
+        },
         child: this,
       ),
     );
@@ -43,7 +49,7 @@ class SubscriptionScreen extends StatelessWidget implements AutoRouteWrapper {
         listener: (context, state) {
           if (state.status == SubscriptionStateStatus.purchaseSuccess) {
             showAppSnackbar(context, 'Purchase Successfully');
-            context.read<SubscriptionCubit>().getAndSetActivePlanOfUser();
+            unawaited(context.read<SubscriptionCubit>().getAndSetActivePlanOfUser());
           }
           flog('status in listen of subscription: ${state.status}');
         },

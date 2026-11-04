@@ -1,4 +1,6 @@
 
+import 'dart:async';
+
 import 'package:api_client/api_client.dart';
 import 'package:app_core/core/presentation/widgets/app_snackbar.dart';
 import 'package:app_core/modules/auth/repository/auth_repository.dart';
@@ -22,11 +24,14 @@ class EditProfileScreen extends StatelessWidget implements AutoRouteWrapper {
         RepositoryProvider<ProfileRepository>(create: (context) => ProfileRepository()),
       ],
       child: BlocProvider(
-        create:
-            (context) => ProfileCubit(
-              RepositoryProvider.of<AuthRepository>(context),
-              RepositoryProvider.of<ProfileRepository>(context),
-            )..fetchProfileDetail(),
+        create: (context) {
+          final cubit = ProfileCubit(
+            RepositoryProvider.of<AuthRepository>(context),
+            RepositoryProvider.of<ProfileRepository>(context),
+          );
+          unawaited(cubit.fetchProfileDetail());
+          return cubit;
+        },
         child: this,
       ),
     );
@@ -97,8 +102,8 @@ class _ProfileImage extends StatelessWidget {
               alignment: Alignment.topRight,
               child: IconButton(
                 icon: const Icon(Icons.edit),
-                onPressed: () {
-                  context.read<ProfileCubit>().onAddImageTap();
+                onPressed: () async {
+                  await context.read<ProfileCubit>().onAddImageTap();
                 },
               ),
             ),
@@ -139,8 +144,8 @@ class _EditButton extends StatelessWidget {
       builder: (context, state) {
         return AppButton(
           isLoading: state.apiStatus == ApiStatus.loading,
-          onPressed: () {
-            context.read<ProfileCubit>().onEditTap();
+          onPressed: () async {
+            await context.read<ProfileCubit>().onEditTap();
           },
           isExpanded: true,
           text: context.t.edit_profile,

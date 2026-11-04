@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:app_core/core/data/services/connectivity_service.dart';
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +32,7 @@ class ConnectivityWrapperState extends State<ConnectivityWrapper> {
 
   @override
   void dispose() {
-    widget.connectivityService.dispose();
+    unawaited(widget.connectivityService.dispose());
     super.dispose();
   }
 }
