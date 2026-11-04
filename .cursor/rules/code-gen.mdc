@@ -1,0 +1,42 @@
+---
+description: "Rules and triggers for running code generation across Melos monorepo packages"
+globs: "**/pubspec.yaml,packages/app_ui/assets/**,packages/app_translations/assets/i18n/**"
+alwaysApply: false
+---
+
+# Code Generation Rules
+
+Automates running repository code generators when assets, translations, routes, or models change.
+
+---
+
+## Trigger Mappings
+
+| File / Folder Modified | Command | Description |
+|---|---|---|
+| `packages/app_translations/assets/i18n/*.json` | `melos run locale-gen` | Regenerates Slang translation classes (`en.i18n.json`) |
+| `packages/app_ui/assets/**` | `melos run asset-gen` | Generates type-safe `Assets` class |
+| `@RoutePage()`, `AppRouter`, `@JsonSerializable` | `melos run build-runner` | Regenerates AutoRoute routes and JSON serializers |
+| `packages/widgetbook/**` | `melos run widgetbook-gen` | Regenerates Widgetbook component catalog |
+
+---
+
+## Code Generation Commands Reference
+
+Always use Melos scripts from repo root:
+
+- **Slang Translations**: `melos run locale-gen`
+- **Asset Generation**: `melos run asset-gen`
+- **Build Runner**: `melos run build-runner`
+- **Widgetbook**: `melos run widgetbook-gen`
+- **Format Code**: `melos run format`
+- **Verify Lint/Types**: `flutter analyze`
+
+---
+
+## Rules for Generated Files
+
+1. **NEVER manually edit generated files** (`*.g.dart`, `*.gr.dart`, `strings.g.dart`, `assets.gen.dart`, `*.directories.g.dart`).
+2. Run the relevant generator whenever editing the source files.
+3. Always verify with `flutter analyze` after generation.
+

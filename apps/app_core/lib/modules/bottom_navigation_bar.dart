@@ -21,8 +21,7 @@ class BottomNavigationBarScreen extends StatefulWidget
       child: BlocProvider(
         create:
             (context) =>
-        NotificationCubit(context.read<HomeRepository>())
-          ..checkNotificationPermissionStatus(),
+        NotificationCubit(context.read<HomeRepository>())..checkNotificationPermissionStatus(),
         child: this,
       ),
     );

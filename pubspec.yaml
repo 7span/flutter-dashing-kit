@@ -104,3 +104,23 @@ melos:
         dart fix --apply --code=require_trailing_commas
       exec:
         concurrency: 10
+
+    cleanup:
+      description: Clean project and regenerate all generated files
+      run: |
+        rm -f apps/app_core/lib/app/config/app_config.g.dart apps/app_core/lib/app/routes/app_router.gr.dart &&
+        flutter clean &&
+        flutter pub cache clean --force &&
+        rm -rf .dart_tool apps/app_core/.dart_tool apps/app_core/build &&
+        dart pub global activate melos &&
+        dart pub global run melos bootstrap &&
+        dart pub global run melos run asset-gen &&
+        dart pub global run melos run locale-gen &&
+        dart pub global run melos run build-runner &&
+        eval "$(ssh-agent -s)"
+        ssh-add ~/.ssh/github_ssh_key &&
+        cat ~/.ssh/github_ssh_key.pub &&
+        git config --global gpg.format ssh
+        git config --global user.signingkey ~/.ssh/github_ssh_key.pub
+        git config --global commit.gpgsign true
+        git config --global tag.gpgsign true

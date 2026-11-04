@@ -64,3 +64,6 @@ linux/flutter/*
 /mason.yaml
 /.mason/
 /mason-lock.json
+
+# /pr-review output
+pr-review-report.md
