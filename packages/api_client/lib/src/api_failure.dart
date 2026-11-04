@@ -31,9 +31,27 @@ class APIFailure extends Failure {
   @override
   String get message {
     if (error is Response) {
-      return (error as Response).data['message'];
+      final data = (error as Response).data;
+      if (data is Map<String, dynamic>) {
+        return data['message']?.toString() ??
+            data['error']?.toString() ??
+            'An error occurred while calling the API';
+      }
+      return 'An error occurred while calling the API';
+    } else if (error is DioException) {
+      final dioException = error as DioException;
+      final data = dioException.response?.data;
+      if (data is Map<String, dynamic>) {
+        return data['message']?.toString() ??
+            data['error']?.toString() ??
+            dioException.message ??
+            'An error occurred while calling the API';
+      } else if (data is String && data.isNotEmpty) {
+        return data;
+      }
+      return dioException.message ?? 'An error occurred while calling the API';
     } else {
-      return 'An error occured while calling the API';
+      return 'An error occurred while calling the API';
     }
   }
 

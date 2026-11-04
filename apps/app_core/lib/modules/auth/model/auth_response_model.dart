@@ -6,10 +6,10 @@ class AuthResponseModel {
     this.avatar,
   });
 
-  factory AuthResponseModel.fromMap(Map<String, dynamic> map) {
+  factory AuthResponseModel.fromMap(Map<String, dynamic> map, {String? defaultEmail}) {
     return AuthResponseModel(
-      id: map['id'] as String,
-      email: map['email'] as String,
+      id: map['id']?.toString() ?? '1',
+      email: map['email']?.toString() ?? defaultEmail ?? '',
       name: map['name'] as String?,
       avatar: map['avatar'] as String?,
     );

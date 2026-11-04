@@ -38,8 +38,7 @@ melos:
   scripts:
     analyze:
       description: Analyze all Dart & Flutter packages
-      exec:
-        concurrency: 10
+      run: melos exec -c 10 -- "flutter analyze ."
 
     build-runner:
       description: Generate environment config, routes & code
