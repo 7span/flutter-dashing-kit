@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:api_client/api_client.dart';
 import 'package:app_core/app/helpers/extensions/extensions.dart';
 import 'package:app_core/app/helpers/mixins/pagination_mixin.dart';
@@ -36,10 +38,14 @@ class HomeScreen extends StatefulWidget implements AutoRouteWrapper {
                       ..safeAdd(const FetchPostsEvent()),
           ),
           BlocProvider(
-            create:
-                (context) =>
-                    ProfileCubit(context.read<AuthRepository>(), context.read<ProfileRepository>())
-                      ..fetchProfileDetail(),
+            create: (context) {
+              final cubit = ProfileCubit(
+                context.read<AuthRepository>(),
+                context.read<ProfileRepository>(),
+              );
+              unawaited(cubit.fetchProfileDetail());
+              return cubit;
+            },
           ),
         ],
 

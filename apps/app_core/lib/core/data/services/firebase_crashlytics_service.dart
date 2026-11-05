@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:app_core/app/config/app_config.dart';
 import 'package:app_core/app/enum.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -14,15 +16,15 @@ class FirebaseCrashlyticsService {
     if (Env.production == AppConfig.environment) {
       FlutterError.onError = (errorDetails) {
         /// If you wish to record a "non-fatal" exception, please use `FirebaseCrashlytics.instance.recordFlutterError` instead
-        FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+        unawaited(FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails));
       };
 
       PlatformDispatcher.instance.onError = (error, stack) {
         /// If you wish to record a "non-fatal" exception, please remove the "fatal" parameter
-        FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+        unawaited(FirebaseCrashlytics.instance.recordError(error, stack, fatal: true));
         return true;
       };
-      method();
+      unawaited(method());
     }
   }
 

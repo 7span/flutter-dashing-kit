@@ -22,7 +22,7 @@ class OneSignalService implements NotificationServiceInterface {
       await OneSignal.Location.setShared(false);
     }
 
-    OneSignal.initialize(appId);
+    await OneSignal.initialize(appId);
     if (shouldLog) {
       await OneSignal.Debug.setLogLevel(OSLogLevel.fatal);
     }

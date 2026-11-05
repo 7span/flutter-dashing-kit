@@ -36,7 +36,10 @@ class AuthRepository implements IAuthRepository {
       .chainEither(RepositoryUtils.checkStatusCode)
       .chainEither(
         (response) => RepositoryUtils.mapToModel(() {
-          return AuthResponseModel.fromMap(response.data as Map<String, dynamic>);
+          return AuthResponseModel.fromMap(
+            response.data as Map<String, dynamic>,
+            defaultEmail: authRequestModel.email,
+          );
         }),
       )
       .flatMap(saveUserToLocal);

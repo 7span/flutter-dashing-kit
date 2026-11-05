@@ -1,0 +1,25 @@
+---
+description: "Pre-PR review and code audit against architecture, BLoC, app_ui, localization, and security standards"
+globs: "**/*.dart"
+alwaysApply: false
+---
+
+# PR Review Rule
+
+## Objective
+Audit the project before submitting a Pull Request against documented architectural and clean-code best practices.
+Single source of truth: `.agents/skills/pr-review/resources/best-practices.md`.
+
+## Workflow
+1. **Scope Selection**: Accept optional path argument (e.g. `apps/app_core/lib/modules/auth`). Default: whole repo (`apps/`, `packages/`). Skip generated files (`*.g.dart`, `*.gr.dart`, `**/gen/**`, Hive registrars).
+2. **Tooling Checks**:
+   - `flutter analyze` or `dart analyze . --fatal-infos`
+   - `dart format --output=none --set-exit-if-changed <scope>`
+3. **Mechanical Rule Audits**:
+   - Architecture: A1-A10 (TaskEither repositories, BLoC/Cubit isolation, Equatable states).
+   - UI (`app_ui`): U1-U10 (`AppScaffold`, `VSpace`/`HSpace`, `AppText`, `AppButton`, `context.colorScheme`, `Assets.*`, `context.t.*`, no widget-returning methods).
+   - Logging & Security: L1-L5 (`flog()`/`Logger`, no PII in logs, no hardcoded secrets, no overly broad permissions).
+   - Imports: I1-I2 (`package:app_core/...` in app_core, no `../` across packages, no private `/lib/src` imports).
+4. **Read-the-Code Checks**: Verify lifecycle risks, unawaited futures, race conditions, and error handling.
+5. **Output**: Write findings to `pr-review-report.md` at repo root with verdict (READY / NOT READY / INCOMPLETE). Never edit source files unprompted.
+

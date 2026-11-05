@@ -65,6 +65,7 @@ analyzer:
     - lib/app/generated/**.dart
     - lib/app/generated/**
     - lib/**/generated_plugin_registrant.dart
+    - build/**
 
     # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
 # Additional information about this file can be found at

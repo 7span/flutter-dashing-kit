@@ -1,5 +1,5 @@
 class ApiEndpoints {
-  static const login = '/api/v1/login';
+  static const login = '/api/login';
   static const signup = '/api/register';
   static const forgotPassword = '/api/v1/forgot-password';
   static const verifyOTP = '/api/v1/verify-otp';

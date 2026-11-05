@@ -1,0 +1,9 @@
+# Project Understanding Documentation
+
+After a client call, for transcript-to-project-understanding requests intended to support later human or AI planning, follow the repository root `AGENTS.md` and `.agents/skills/project-understanding/SKILL.md`.
+
+The client-call transcript is required. Ask for it when missing. Default to from-scratch transcript-only understanding; do not inspect current code unless codebase alignment is explicitly requested. The delegated subagent must automatically install the official `grill-with-docs`, `grilling`, and `domain-modeling` skills with `npx` when missing, then run an iterative transcript grill: derive numbered, evidence-backed questions, write them to `docs/project/open-questions.md`, present them, and stop until answers arrive. The workflow must ask when evidence is missing, ambiguous, contradictory, or consequential. It must classify transcript requirements, inferences requiring confirmation, and unknowns separately; use repository facts only in an explicitly requested alignment review.
+
+This workflow may inspect the repository and transcript, but may write only `.md` files inside `docs/project/`. It must not modify source code, configuration, dependencies, generated files, tests, scripts, agent rules, or project structure, and must not run code generation, formatting, analysis, project dependency installation, builds, migrations, or setup commands. The delegated subagent may install only the official agent-skill dependencies when they are missing.
+
+If required questions are unanswered, generate or retain a useful transcript-only package marked `Draft — questions pending` and stop asking questions. Once they are answered and no new blockers appear, proceed automatically to finalize the documentation without asking for another confirmation.

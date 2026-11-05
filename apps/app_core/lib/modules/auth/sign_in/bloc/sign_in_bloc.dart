@@ -71,7 +71,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
       ),
     );
     if (state.isValid) {
-      emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
+      emit(state.copyWith(status: FormzSubmissionStatus.inProgress, errorMessage: ''));
       final loginEither =
           await _authenticationRepository
               .login(
@@ -85,7 +85,12 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
       loginEither.fold(
         (failure) {
           log('failure: $failure');
-          emit(state.copyWith(status: FormzSubmissionStatus.failure));
+          emit(
+            state.copyWith(
+              errorMessage: failure.message,
+              status: FormzSubmissionStatus.failure,
+            ),
+          );
         },
         (success) => emit(
           state.copyWith(status: FormzSubmissionStatus.success),

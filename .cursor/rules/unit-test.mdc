@@ -1,0 +1,40 @@
+---
+description: "Rules for authoring unit tests for BLoC, Cubit, TaskEither Repositories, and Models"
+globs: "test/**/*.dart"
+alwaysApply: false
+---
+
+# Unit Test Rule
+
+Rules and conventions for writing unit tests across the Flutter Monorepo.
+
+---
+
+## Architecture Requirements
+
+1. **BLoCs and Cubits**:
+   - Use `bloc_test` with `package:mocktail`.
+   - Test both success and failure cases.
+   - Use `build`, `setUp`, `act`, `expect`, `verify`.
+   - Verify initial state in a separate test.
+   - Never mock internal state; mock injected repositories only.
+
+2. **Repositories (`TaskEither`)**:
+   - Test methods returning `TaskEither<Failure, T>`.
+   - Mock underlying HTTP / API client or data source.
+   - Assert `result.run()` yields `Right(model)` on success (200/304).
+   - Assert `result.run()` yields `Left(APIFailure)` or `Left(ModelConversionFailure)` on error/invalid data.
+
+3. **Models**:
+   - Test `fromJson` with valid JSON payload.
+   - Test `toJson` roundtrip serialization.
+   - Test Equatable value equality (`modelA == modelB`).
+
+4. **Test Placement**:
+   - Mirror directory layout: `test/modules/[feature]/bloc/[feature]_bloc_test.dart`.
+   - Mirror `test/modules/[feature]/repository/[feature]_repository_test.dart`.
+   - Mirror `test/modules/[feature]/model/[feature]_model_test.dart`.
+
+5. **Running Tests**:
+   - Run tests using `flutter test` or `melos exec -- "flutter test"`.
+

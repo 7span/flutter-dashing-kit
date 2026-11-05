@@ -34,7 +34,7 @@ class ForgotPasswordBloc extends Bloc<ForgotPasswordEvent, ForgotPasswordState> 
       final result =
           await _authenticationRepository.forgotPassword(AuthRequestModel.forgotPassword(email: state.email.value)).run();
       result.fold(
-        (failure) => emit(state.copyWith(status: FormzSubmissionStatus.failure)),
+        (failure) => emit(state.copyWith(status: FormzSubmissionStatus.failure, errorMessage: failure.message)),
         (success) => emit(state.copyWith(status: FormzSubmissionStatus.success)),
       );
     }

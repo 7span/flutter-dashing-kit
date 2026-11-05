@@ -1,0 +1,10 @@
+targets:
+  $default:
+    sources:
+      - lib/**
+      - test/**
+      - .env.dev
+      - .env.prod
+      - .env.staging
+      - pubspec.*
+      - $package$

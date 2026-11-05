@@ -1,4 +1,5 @@
 // ignore_for_file: avoid_single_cascade_in_expression_statements
+import 'dart:async';
 import 'dart:io';
 
 import 'package:app_core/app/helpers/injection.dart';
@@ -18,7 +19,7 @@ class SubscriptionCubit extends Cubit<SubscriptionState> {
   SubscriptionCubit(this.repository, this.context)
     : super(const SubscriptionState()) {
     repository.init(context);
-    listenToPurchaseStream(context);
+    unawaited(listenToPurchaseStream(context));
   }
 
   final SubscriptionRepository repository;

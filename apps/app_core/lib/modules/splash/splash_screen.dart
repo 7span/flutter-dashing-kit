@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:app_core/app/helpers/logger_helper.dart';
 import 'package:app_core/app/routes/app_router.dart';
 import 'package:app_subscription/app_subscription_api.dart';
@@ -18,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-    handleSubscription();
+    unawaited(handleSubscription());
     super.initState();
   }
 
@@ -47,7 +49,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void dispose() {
     flog('dispose of splash');
-    disposeSubscription();
+    unawaited(disposeSubscription());
     super.dispose();
   }
 }

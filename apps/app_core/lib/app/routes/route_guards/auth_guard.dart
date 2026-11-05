@@ -1,5 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:app_core/app/routes/app_router.dart';
+import 'dart:async';
+
 import 'package:app_core/app/helpers/injection.dart';
 import 'package:app_core/core/data/services/hive.service.dart';
 
@@ -17,7 +19,7 @@ class AuthGuard extends AutoRouteGuard {
       /// we redirect the user to our login page
       /// tip: use resolver.redirect to have the redirected route
       /// automatically removed from the stack when the resolver is completed
-      resolver.redirectUntil(const SignInRoute());
+      unawaited(resolver.redirectUntil(const SignInRoute()));
     }
   }
 }

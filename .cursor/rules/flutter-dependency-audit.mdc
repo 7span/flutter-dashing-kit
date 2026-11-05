@@ -1,0 +1,46 @@
+---
+description: "Safely audit, analyze, and migrate dependencies one-by-one in a Flutter/Dart Melos monorepo"
+globs: "**/pubspec.yaml,melos.yaml"
+alwaysApply: false
+---
+
+# Flutter Dependency Audit Rule
+
+## Objective
+Safely maintain a Flutter/Dart Melos monorepo by identifying deprecated packages and APIs, recommending compatible stable versions, and upgrading one dependency at a time.
+
+## Workflow Rules
+
+### Phase 1: Read-only discovery
+1. Inspect Git status and preserve all user changes.
+2. Check Flutter and Dart SDK versions.
+3. Detect workspace configuration:
+   - Check if root `pubspec.yaml` contains `workspace: [...]` (Dart Pub Workspaces).
+   - Or if packages use traditional Melos standalone package configs.
+4. Do not modify project files during initial audit.
+
+### Phase 2: Dependency and API audit
+- If `workspace:` exists in root `pubspec.yaml`, run `flutter pub outdated` from the **monorepo root** for unified graph resolution.
+- For package-scoped analysis or legacy Melos setups, run in package directories or `melos exec -- flutter pub outdated`.
+- Run `melos run analyze` (or `flutter analyze`).
+- Run `dart fix --dry-run` to preview deprecations without applying them.
+- Distinguish between supported outdated vs deprecated/discontinued packages.
+
+### Phase 3: Reporting
+- Write or update findings in `docs/dependency-audit/REPORT.md`.
+- Prioritize: P0 (critical/security), P1 (release-blocking), P2 (important migration), P3 (routine).
+
+### Phase 4: Approval
+- Recommend exactly **one** candidate to migrate first with rationale.
+- Wait for explicit user approval before modifying code or `pubspec.yaml`.
+
+### Phase 5 & 6: Migration & Verification
+1. Update only the single approved dependency.
+2. Run `flutter pub get` in appropriate context (root for Pub Workspaces).
+3. If code generation packages are involved, regenerate outputs (`dart run build_runner build --delete-conflicting-outputs` or `melos run build-runner`).
+4. Native checks:
+   - Android: verify Gradle & `compileSdk`.
+   - iOS: verify `pod install` in application `ios/` folders.
+5. Verify tests and static analysis.
+6. Report results and update `REPORT.md`.
+

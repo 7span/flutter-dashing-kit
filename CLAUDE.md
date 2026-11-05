@@ -1,0 +1,5 @@
+# Claude project instructions
+
+After a client call, use the transcript-informed project-understanding workflow to create context for human engineers and AI coding agents. Follow `AGENTS.md` and `.agents/skills/project-understanding/SKILL.md`.
+
+This is documentation-only: require the client transcript, have the delegated subagent automatically install the official grill-with-docs dependencies with `npx` when needed, inspect files and transcript input, run the iterative transcript grill by documenting numbered evidence-backed questions in `docs/project/open-questions.md`, and wait before resolving ambiguity. Write only Markdown files under `docs/project/`. Do not modify code or any project files outside that directory, and do not run generators, formatters, analyzers, builds, project dependency installs, migrations, or setup commands.
